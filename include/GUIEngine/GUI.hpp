@@ -39,11 +39,11 @@ public:
         while (m_app->isRunning() && !m_window->shouldClose()) {
             m_app->processEvents();
             m_app->update();
-            m_renderer->beginFrame();
+            Color bgColor(0.12f, 0.12f, 0.14f);
+            m_renderer->beginFrame(bgColor);
             m_app->render();
             if (m_renderCallback) m_renderCallback();
             m_renderer->endFrame();
-            m_window->setCursorVisible(true);
         }
     }
 

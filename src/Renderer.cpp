@@ -211,7 +211,7 @@ void Renderer::getViewport(int& width, int& height) const {
     height = m_viewportHeight;
 }
 
-void Renderer::beginFrame() {
+void Renderer::beginFrame(const Color& clearColor) {
     glUseProgram(m_shaderProgram);
     setProjection(m_viewportWidth, m_viewportHeight);
     glBindVertexArray(m_vao);
@@ -222,6 +222,15 @@ void Renderer::beginFrame() {
 
     Rect fullRect(0, 0, static_cast<float>(m_viewportWidth), static_cast<float>(m_viewportHeight));
     m_scissorStack.push_back(fullRect);
+
+    int sx = static_cast<int>(fullRect.x);
+    int sy = static_cast<int>(m_viewportHeight - fullRect.y - fullRect.height);
+    int sw = static_cast<int>(fullRect.width);
+    int sh = static_cast<int>(fullRect.height);
+    glScissor(sx, sy, sw, sh);
+
+    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Renderer::endFrame() {

@@ -244,10 +244,6 @@ void Application::update() {
 
 void Application::render() {
     if (!m_root || !m_renderer) return;
-
-    Color clearColor = m_theme.getColor("backgroundColor", Color(0.12f, 0.12f, 0.14f));
-    m_renderer->clear(clearColor);
-
     m_root->render(*m_renderer);
 }
 

@@ -99,7 +99,11 @@ void Window::setPosition(int x, int y) {
 
 void Window::setVSync(bool enabled) {
     m_vsync = enabled;
-    SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+    int result = SDL_GL_SetSwapInterval(enabled ? 1 : 0);
+    if (result != 0 && enabled) {
+        // Tentar VSync adaptativo se o normal falhar
+        SDL_GL_SetSwapInterval(-1);
+    }
 }
 
 void Window::setFullscreen(bool enabled) {

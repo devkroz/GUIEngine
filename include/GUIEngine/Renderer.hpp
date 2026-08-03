@@ -37,7 +37,7 @@ public:
     bool init(int viewportWidth, int viewportHeight);
     void shutdown();
 
-    void beginFrame();
+    void beginFrame(const Color& clearColor = Color(0.12f, 0.12f, 0.14f));
     void endFrame();
     void flush();
 
