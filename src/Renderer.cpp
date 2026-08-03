@@ -236,12 +236,6 @@ void Renderer::beginFrame(const Color& clearColor) {
 
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // Verificar erros OpenGL
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR) {
-        fprintf(stderr, "[GUIEngine] Erro OpenGL no beginFrame: 0x%x\n", err);
-    }
 }
 
 void Renderer::endFrame() {
@@ -267,11 +261,6 @@ void Renderer::flush() {
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_indices.size() * sizeof(unsigned int), m_indices.data());
 
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
-
-    GLenum err = glGetError();
-    if (err != GL_NO_ERROR) {
-        fprintf(stderr, "[GUIEngine] Erro OpenGL no flush: 0x%x verts=%zu idx=%zu\n", err, m_vertices.size(), m_indices.size());
-    }
 
     m_vertices.clear();
     m_indices.clear();
@@ -594,9 +583,8 @@ void Renderer::loadFont(const std::string& name, const std::string& path, float 
     m_currentFontSize = pixelSize;
     m_baseFontSize = pixelSize;
 
-    if (!m_fontTexture) {
-        buildFontAtlasTexture();
-    }
+    // Sempre reconstruir a textura do atlas com a nova fonte
+    buildFontAtlasTexture();
 
     delete[] ttfBuffer;
 }
