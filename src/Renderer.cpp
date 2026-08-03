@@ -216,6 +216,11 @@ void Renderer::beginFrame(const Color& clearColor) {
     setProjection(m_viewportWidth, m_viewportHeight);
     glBindVertexArray(m_vao);
 
+    // Bind textura dummy por defeito
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_fontTexture);
+    glUniform1i(m_texLoc, 0);
+
     m_vertices.clear();
     m_indices.clear();
     m_scissorStack.clear();
@@ -231,12 +236,22 @@ void Renderer::beginFrame(const Color& clearColor) {
 
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    // Verificar erros OpenGL
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR) {
+        fprintf(stderr, "[GUIEngine] Erro OpenGL no beginFrame: 0x%x\n", err);
+    }
 }
 
 void Renderer::endFrame() {
     flush();
 
-    SDL_GL_SwapWindow(SDL_GL_GetCurrentWindow());
+    if (m_sdlWindow) {
+        SDL_GL_SwapWindow(m_sdlWindow);
+    } else {
+        SDL_GL_SwapWindow(SDL_GL_GetCurrentWindow());
+    }
 }
 
 void Renderer::flush() {
@@ -252,6 +267,11 @@ void Renderer::flush() {
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, m_indices.size() * sizeof(unsigned int), m_indices.data());
 
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
+
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR) {
+        fprintf(stderr, "[GUIEngine] Erro OpenGL no flush: 0x%x verts=%zu idx=%zu\n", err, m_vertices.size(), m_indices.size());
+    }
 
     m_vertices.clear();
     m_indices.clear();

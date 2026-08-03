@@ -19,9 +19,12 @@ bool Application::init(Window* window) {
     m_window = window;
     if (!m_window) return false;
 
-    m_renderer = new Renderer();
-    if (!m_renderer->init(m_window->getWidth(), m_window->getHeight())) {
-        return false;
+    if (!m_renderer) {
+        m_renderer = new Renderer();
+        m_renderer->setSDLWindow(m_window->getHandle());
+        if (!m_renderer->init(m_window->getWidth(), m_window->getHeight())) {
+            return false;
+        }
     }
 
     m_lastTime = static_cast<float>(SDL_GetTicks()) / 1000.0f;
@@ -30,11 +33,7 @@ bool Application::init(Window* window) {
 }
 
 void Application::shutdown() {
-    if (m_renderer) {
-        m_renderer->shutdown();
-        delete m_renderer;
-        m_renderer = nullptr;
-    }
+    m_renderer = nullptr;
     m_root = nullptr;
     m_focusedWidget = nullptr;
     m_hoveredWidget = nullptr;

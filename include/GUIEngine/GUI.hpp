@@ -19,9 +19,11 @@ public:
         if (!m_window->create(title, width, height)) return false;
 
         m_renderer = std::make_unique<Renderer>();
+        m_renderer->setSDLWindow(m_window->getHandle());
         if (!m_renderer->init(width, height)) return false;
 
         m_app = std::make_unique<Application>();
+        m_app->setRenderer(m_renderer.get());
         if (!m_app->init(m_window.get())) return false;
 
         setupDefaultFonts();

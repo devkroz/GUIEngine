@@ -42,6 +42,7 @@ public:
 
     Window* getWindow() { return m_window; }
     Renderer* getRenderer() { return m_renderer; }
+    void setRenderer(Renderer* r) { m_renderer = r; }
 
     void setTheme(const Style& theme) { m_theme = theme; }
     const Style& getTheme() const { return m_theme; }

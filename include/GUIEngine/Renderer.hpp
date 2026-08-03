@@ -5,6 +5,8 @@
 #include <string>
 #include <unordered_map>
 
+struct SDL_Window;
+
 namespace GUIEngine {
 
 struct Vertex {
@@ -43,6 +45,8 @@ public:
 
     void setViewport(int width, int height);
     void getViewport(int& width, int& height) const;
+
+    void setSDLWindow(SDL_Window* window) { m_sdlWindow = window; }
 
     void pushScissor(const Rect& rect);
     void popScissor();
@@ -95,6 +99,7 @@ private:
     unsigned int m_fontTexture = 0;
     unsigned int m_projLoc = 0;
     unsigned int m_texLoc = 0;
+    SDL_Window* m_sdlWindow = nullptr;
 
     std::vector<Vertex> m_vertices;
     std::vector<unsigned int> m_indices;
