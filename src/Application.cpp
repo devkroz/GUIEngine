@@ -212,9 +212,12 @@ void Application::doLayout() {
 
     int w, h;
     m_window->getSize(w, h);
+    float fw = static_cast<float>(w);
+    float fh = static_cast<float>(h);
 
-    Rect rootRect(0, 0, static_cast<float>(w), static_cast<float>(h));
-    m_root->measure(static_cast<float>(w), static_cast<float>(h));
+    Rect rootRect(0, 0, fw, fh);
+    m_root->measure(fw, fh);
+    m_root->setFixedSize(fw, fh);
     m_root->layout(rootRect);
 
     m_layoutDirty = false;
@@ -244,6 +247,11 @@ void Application::update() {
 
 void Application::render() {
     if (!m_root || !m_renderer) return;
+
+    if (m_layoutDirty) {
+        doLayout();
+    }
+
     m_root->render(*m_renderer);
 }
 

@@ -73,6 +73,7 @@ public:
     void setPadding(const Padding& p) { m_layout.padding = p; }
     void setFixedWidth(float w) { m_layout.fixedWidth = w; m_layout.minWidth = w; }
     void setFixedHeight(float h) { m_layout.fixedHeight = h; m_layout.minHeight = h; }
+    void setFixedSize(float w, float h) { setFixedWidth(w); setFixedHeight(h); }
     void setMinWidth(float w) { m_layout.minWidth = w; }
     void setMinHeight(float h) { m_layout.minHeight = h; }
 

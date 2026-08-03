@@ -42,7 +42,7 @@ Vec2 Widget::measureContent(float availableWidth, float availableHeight) {
         if (!child->isVisible()) continue;
         Vec2 childSize = child->measure(maxW, maxH);
 
-        if (child->m_layout.direction == LayoutDirection::Row) {
+        if (m_layout.direction == LayoutDirection::Row) {
             contentSize.x += childSize.x;
             contentSize.y = std::max(contentSize.y, childSize.y);
         } else {
