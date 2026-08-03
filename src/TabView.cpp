@@ -58,10 +58,6 @@ void TabView::closeTab(const std::string& id) {
     removeTab(id);
 }
 
-void TabView::setTabPosition(LayoutDirection pos) {
-    m_tabPosition = (pos == LayoutDirection::Row) ? LayoutDirection::Row : LayoutDirection::Column;
-}
-
 Rect TabView::getTabRect(int index) const {
     float tabWidth = 0;
     int visibleTabs = 0;

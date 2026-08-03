@@ -1,6 +1,6 @@
 #include "GUIEngine/Renderer.hpp"
 
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <stb_image.h>
@@ -115,8 +115,9 @@ Renderer::~Renderer() {
 }
 
 bool Renderer::init(int viewportWidth, int viewportHeight) {
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
-        std::cerr << "[GUIEngine] Failed to initialize GLAD" << std::endl;
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        std::cerr << "[GUIEngine] Erro ao inicializar GLEW: " << glewGetErrorString(err) << std::endl;
         return false;
     }
 
@@ -157,6 +158,16 @@ bool Renderer::init(int viewportWidth, int viewportHeight) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
+
+    // Criar textura dummy para evitar crashes se nenhuma fonte for carregada
+    if (!m_fontTexture) {
+        glGenTextures(1, &m_fontTexture);
+        glBindTexture(GL_TEXTURE_2D, m_fontTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        unsigned char dummy[4] = {255, 255, 255, 255};
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1, 1, 0, GL_RED, GL_UNSIGNED_BYTE, dummy);
+    }
 
     return true;
 }
@@ -222,6 +233,9 @@ void Renderer::endFrame() {
 void Renderer::flush() {
     if (m_vertices.empty() || m_indices.empty()) return;
 
+    glUseProgram(m_shaderProgram);
+    glBindVertexArray(m_vao);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertices.size() * sizeof(Vertex), m_vertices.data());
 
@@ -263,7 +277,12 @@ void Renderer::addTriangleIndices(int i0, int i1, int i2) {
 }
 
 void Renderer::pushScissor(const Rect& rect) {
-    Rect current = m_scissorStack.back();
+    Rect current;
+    if (m_scissorStack.empty()) {
+        current = Rect(0, 0, static_cast<float>(m_viewportWidth), static_cast<float>(m_viewportHeight));
+    } else {
+        current = m_scissorStack.back();
+    }
     float x1 = std::max(current.x, rect.x);
     float y1 = std::max(current.y, rect.y);
     float x2 = std::min(current.x + current.width, rect.x + rect.width);

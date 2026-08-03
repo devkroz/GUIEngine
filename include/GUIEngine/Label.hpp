@@ -35,6 +35,8 @@ private:
     Alignment m_align = Alignment::Left;
     bool m_wrap = false;
     bool m_multiline = false;
+
+    float getTextWidth(const std::string& text);
 };
 
 }

@@ -43,18 +43,18 @@ Vec2 Widget::measureContent(float availableWidth, float availableHeight) {
         Vec2 childSize = child->measure(maxW, maxH);
 
         if (child->m_layout.direction == LayoutDirection::Row) {
-            contentSize.width += childSize.width;
-            contentSize.height = std::max(contentSize.height, childSize.height);
+            contentSize.x += childSize.x;
+            contentSize.y = std::max(contentSize.y, childSize.y);
         } else {
-            contentSize.width = std::max(contentSize.width, childSize.width);
-            contentSize.height += childSize.height;
+            contentSize.x = std::max(contentSize.x, childSize.x);
+            contentSize.y += childSize.y;
         }
     }
 
-    if (w < 0) w = std::max(contentSize.width, m_layout.minWidth);
+    if (w < 0) w = std::max(contentSize.x, m_layout.minWidth);
     else w = std::max(w, m_layout.minWidth);
 
-    if (h < 0) h = std::max(contentSize.height, m_layout.minHeight);
+    if (h < 0) h = std::max(contentSize.y, m_layout.minHeight);
     else h = std::max(h, m_layout.minHeight);
 
     if (m_layout.maxWidth > 0) w = std::min(w, m_layout.maxWidth);

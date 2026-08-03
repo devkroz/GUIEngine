@@ -23,7 +23,7 @@ private:
 
         auto* cabecalho = root->add<Label>("GUIEngine Demo");
         cabecalho->setFontSize(24);
-        cabecalho->setTextColor(Color(1, 1, 1));
+        cabecalho->setTextColor(Color(1.0f, 1.0f, 1.0f));
 
         auto* subtitulo = root->add<Label>("Uma engine de interface moderna em C++ com SDL2 + OpenGL");
         subtitulo->setFontSize(13);
@@ -149,7 +149,7 @@ private:
         auto* labelJanela = conteudoJanela->add<Label>("Esta e uma janela flutuante e arrastavel!");
         labelJanela->setFontSize(14);
         auto* btnFecharJanela = conteudoJanela->add<Button>("Fechar Janela");
-        btnFecharJanela->setOnClick([janelaFlutuante]() {
+        btnFecharJanela->setOnClickListener([janelaFlutuante]() {
             janelaFlutuante->setVisible(false);
         });
 

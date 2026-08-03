@@ -1,6 +1,7 @@
 #include "GUIEngine/WindowWidget.hpp"
 #include "GUIEngine/Renderer.hpp"
 #include "GUIEngine/Style.hpp"
+#include "GUIEngine/IconButton.hpp"
 
 namespace GUIEngine {
 
@@ -27,7 +28,7 @@ WindowWidget::WindowWidget(const std::string& title) : Panel(), m_title(title) {
     m_titleLabel->setFontSize(13);
 
     m_closeButton = m_headerPanel->add<IconButton>("x");
-    m_closeButton->setOnClick([this]() {
+    m_closeButton->setOnClickListener([this]() {
         if (m_onClose) m_onClose();
         setVisible(false);
     });

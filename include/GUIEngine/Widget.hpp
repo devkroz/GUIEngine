@@ -151,6 +151,8 @@ protected:
     virtual Vec2 measureContent(float availableWidth, float availableHeight);
     virtual void handleEvent(const Event& event);
 
+    friend class Application;
+
 private:
     void notifyParentLayoutChanged();
 

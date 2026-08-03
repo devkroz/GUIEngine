@@ -68,7 +68,20 @@ set(GUIENGINE_PUBLIC_HEADERS
 )
 
 # Dependencias de terceiros
+find_package(GLEW QUIET)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Dependencies.cmake)
+
+# Resolver os targets do SDL2 (diferentes distros usam nomes diferentes)
+if(TARGET SDL2::SDL2)
+    set(SDL2_MAIN_TARGET SDL2::SDL2)
+    set(SDL2_MAIN_LIB SDL2::SDL2main)
+elseif(TARGET SDL2::Core)
+    set(SDL2_MAIN_TARGET SDL2::Core)
+    set(SDL2_MAIN_LIB SDL2::Main)
+elseif(TARGET SDL2::SDL2-static)
+    set(SDL2_MAIN_TARGET SDL2::SDL2-static)
+    set(SDL2_MAIN_LIB SDL2::SDL2main)
+endif()
 
 # Alvo da biblioteca
 if(GUIENGINE_BUILD_SHARED)
@@ -80,20 +93,37 @@ endif()
 target_include_directories(GUIEngine
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+if(DEFINED SDL2_MAIN_TARGET)
+    target_link_libraries(GUIEngine PUBLIC ${SDL2_MAIN_TARGET})
+    if(TARGET ${SDL2_MAIN_LIB})
+        target_link_libraries(GUIEngine PUBLIC ${SDL2_MAIN_LIB})
+    endif()
+endif()
+
 target_link_libraries(GUIEngine
-    PUBLIC
-        SDL2::Core
-        SDL2::Main
     PRIVATE
-        glad
         stb_image
         stb_truetype
 )
+
+find_package(OpenGL REQUIRED)
+
+if(TARGET GLEW::GLEW)
+    target_link_libraries(GUIEngine PUBLIC GLEW::GLEW ${OPENGL_gl_LIBRARY})
+else()
+    find_path(GLEW_INCLUDE_DIR GL/glew.h)
+    find_library(GLEW_LIBRARY NAMES GLEW glew)
+    if(GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
+        target_include_directories(GUIEngine PUBLIC ${GLEW_INCLUDE_DIR})
+        target_link_libraries(GUIEngine PUBLIC ${GLEW_LIBRARY} ${OPENGL_gl_LIBRARY})
+    else()
+        message(FATAL_ERROR "[GUIEngine] GLEW nao encontrado! Instala com: sudo pacman -S glew")
+    endif()
+endif()
 
 if(UNIX AND NOT APPLE)
     target_link_libraries(GUIEngine PUBLIC pthread dl)

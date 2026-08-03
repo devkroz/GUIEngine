@@ -3,6 +3,7 @@
 #include "Application.hpp"
 #include "Window.hpp"
 #include "Renderer.hpp"
+#include <fstream>
 
 namespace GUIEngine {
 
@@ -60,6 +61,27 @@ private:
     ~GUI() { shutdown(); }
 
     void setupDefaultFonts() {
+        const char* fontPaths[] = {
+            "/usr/share/fonts/TTF/DejaVuSans.ttf",
+            "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf",
+            "/usr/share/fonts/noto/NotoSans-Regular.ttf",
+            "/usr/share/fonts/liberation-fonts/LiberationSans-Regular.ttf",
+            "/usr/share/fonts/gnu-free/FreeSans.ttf",
+            "/usr/share/fonts/droid/DroidSans.ttf",
+            nullptr
+        };
+
+        for (int i = 0; fontPaths[i]; ++i) {
+            std::ifstream f(fontPaths[i]);
+            if (f.good()) {
+                f.close();
+                m_renderer->loadFont("default", fontPaths[i], 14.0f);
+                m_renderer->useFont("default");
+                return;
+            }
+        }
     }
 
     std::unique_ptr<Window> m_window;

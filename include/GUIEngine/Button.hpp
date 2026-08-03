@@ -32,13 +32,15 @@ public:
 protected:
     virtual Color resolveColor(const std::string& key1, const std::string& key2, const Color& def);
 
-private:
+protected:
     std::string m_text;
     Label* m_label = nullptr;
     bool m_primary = false;
     float m_fontSize = 0;
     std::string m_icon;
     Padding m_padding = Padding(8, 16);
+
+private:
 };
 
 }

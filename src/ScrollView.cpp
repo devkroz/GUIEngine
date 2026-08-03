@@ -28,7 +28,7 @@ void ScrollView::render(Renderer& renderer) {
     Color bgColor = m_style.getColor("panelColor", theme.get().getColor("panelColor", Color(0.16f, 0.16f, 0.19f)));
     float radius = m_style.getFloat("borderRadius", 0.0f);
 
-    if (!isClipped(m_geometry))
+    if (!renderer.isClipped(m_geometry))
         renderer.drawRect(m_geometry, bgColor, radius);
 
     renderer.pushScissor(m_geometry);

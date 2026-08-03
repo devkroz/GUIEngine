@@ -6,6 +6,7 @@
 #include <vector>
 #include <any>
 #include <unordered_map>
+#include <algorithm>
 
 namespace GUIEngine {
 

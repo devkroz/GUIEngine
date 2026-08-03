@@ -20,7 +20,7 @@ public:
 
     bool isContainer() const override { return true; }
 
-private:
+protected:
     bool m_shadow = false;
 };
 

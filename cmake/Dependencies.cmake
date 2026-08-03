@@ -3,7 +3,11 @@
 include(FetchContent)
 
 # SDL2
-find_package(SDL2 QUIET)
+find_package(SDL2 CONFIG QUIET)
+if(NOT SDL2_FOUND)
+    find_package(SDL2 QUIET)
+endif()
+
 if(NOT SDL2_FOUND)
     FetchContent_Declare(
         SDL2
@@ -24,33 +28,14 @@ if(NOT SDL2_FOUND)
     endif()
 endif()
 
-# GLAD - Carregador de funcoes OpenGL
-FetchContent_Declare(
-    glad
-    GIT_REPOSITORY https://github.com/Dav1dde/glad.git
-    GIT_TAG v0.1.36
-    GIT_SHALLOW TRUE
-)
-FetchContent_GetProperties(glad)
-if(NOT glad_POPULATED)
-    FetchContent_Populate(glad)
-endif()
-
-if(NOT TARGET glad)
-    add_library(glad STATIC ${glad_SOURCE_DIR}/src/glad.c)
-    target_include_directories(glad PUBLIC ${glad_SOURCE_DIR}/include)
-endif()
-
 # STB - Carregamento de imagens e renderizacao de fontes TrueType
 FetchContent_Declare(
     stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
     GIT_TAG master
 )
-FetchContent_GetProperties(stb)
-if(NOT stb_POPULATED)
-    FetchContent_Populate(stb)
-endif()
+cmake_policy(SET CMP0169 OLD)
+FetchContent_Populate(stb)
 
 # stb_image precisa de uma unidade de compilacao com STB_IMAGE_IMPLEMENTATION
 if(NOT TARGET stb_image)

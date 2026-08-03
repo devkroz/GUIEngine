@@ -205,21 +205,21 @@ RadioButton::RadioButton(const std::string& label) : Widget(), m_labelText(label
     m_layout.minHeight = 28;
     m_layout.minWidth = 100;
 
-    m_innerLabel = add<Label>(label);
-    m_innerLabel->setAlign(Label::Alignment::Left);
+    m_label = add<Label>(label);
+    m_label->setAlign(Label::Alignment::Left);
 }
 
 void RadioButton::setLabel(const std::string& text) {
     m_labelText = text;
-    if (m_innerLabel) m_innerLabel->setText(text);
+    if (m_label) m_label->setText(text);
 }
 
 Vec2 RadioButton::measureContent(float availableWidth, float availableHeight) {
     Vec2 size = Widget::measureContent(availableWidth, availableHeight);
 
     float labelWidth = 0;
-    if (m_innerLabel && m_innerLabel->isVisible()) {
-        Vec2 labelSize = m_innerLabel->measure(availableWidth, availableHeight);
+    if (m_label && m_label->isVisible()) {
+        Vec2 labelSize = m_label->measure(availableWidth, availableHeight);
         labelWidth = labelSize.x;
     }
 
@@ -251,10 +251,10 @@ void RadioButton::render(Renderer& renderer) {
             selectColor, innerSize * 0.5f);
     }
 
-    if (m_innerLabel) {
-        m_innerLabel->setPosition(m_geometry.x + m_circleSize + 8, m_geometry.y);
-        m_innerLabel->setSize(m_geometry.width - m_circleSize - 8, m_geometry.height);
-        m_innerLabel->render(renderer);
+    if (m_label) {
+        m_label->setPosition(m_geometry.x + m_circleSize + 8, m_geometry.y);
+        m_label->setSize(m_geometry.width - m_circleSize - 8, m_geometry.height);
+        m_label->render(renderer);
     }
 }
 
