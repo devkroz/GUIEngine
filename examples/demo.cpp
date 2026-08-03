@@ -5,7 +5,7 @@ using namespace GUIEngine;
 class DemoApp {
 public:
     void run() {
-        if (!GUI::instance().init(1280, 720, "GUIEngine - Demo Application")) {
+        if (!GUI::instance().init(1280, 720, "GUIEngine - Aplicacao Demo")) {
             return;
         }
 
@@ -21,116 +21,116 @@ private:
         root->setMargin(Margin(0));
         root->getLayout().spacing = 16;
 
-        auto* header = root->add<Label>("GUIEngine Demo");
-        header->setFontSize(24);
-        header->setTextColor(Color(1, 1, 1));
+        auto* cabecalho = root->add<Label>("GUIEngine Demo");
+        cabecalho->setFontSize(24);
+        cabecalho->setTextColor(Color(1, 1, 1));
 
-        auto* subtitle = root->add<Label>("A modern C++ GUI engine with SDL2 + OpenGL");
-        subtitle->setFontSize(13);
+        auto* subtitulo = root->add<Label>("Uma engine de interface moderna em C++ com SDL2 + OpenGL");
+        subtitulo->setFontSize(13);
 
-        auto* separator = root->add<Separator>(Separator::Orientation::Horizontal);
+        auto* separador = root->add<Separator>(Separator::Orientation::Horizontal);
 
-        auto* panel = root->add<Panel>();
-        panel->setPadding(Padding(20));
-        panel->getLayout().grow = 1;
-        panel->getLayout().direction = LayoutDirection::Column;
-        panel->getLayout().spacing = 12;
-        panel->setShadow(true);
+        auto* painel = root->add<Panel>();
+        painel->setPadding(Padding(20));
+        painel->getLayout().grow = 1;
+        painel->getLayout().direction = LayoutDirection::Column;
+        painel->getLayout().spacing = 12;
+        painel->setShadow(true);
 
-        auto* buttonsRow = panel->add<HBox>();
-        buttonsRow->getLayout().spacing = 8;
+        auto* linhaBotoes = painel->add<HBox>();
+        linhaBotoes->getLayout().spacing = 8;
 
-        auto* btn1 = buttonsRow->add<Button>("Primary Button");
+        auto* btn1 = linhaBotoes->add<Button>("Botao Primario");
         btn1->setPrimary(true);
-        int clickCount = 0;
-        btn1->setOnClickListener([this, clickCount]() mutable {
-            clickCount++;
+        int contagemCliques = 0;
+        btn1->setOnClickListener([this, contagemCliques]() mutable {
+            contagemCliques++;
         });
 
-        auto* btn2 = buttonsRow->add<Button>("Secondary");
+        auto* btn2 = linhaBotoes->add<Button>("Secundario");
         btn2->setOnClickListener([]() {});
 
-        auto* btn3 = buttonsRow->add<Button>("Disabled");
+        auto* btn3 = linhaBotoes->add<Button>("Desativado");
         btn3->setEnabled(false);
 
-        auto* iconBtn = buttonsRow->add<IconButton>("+");
-        iconBtn->setBackgroundColor(Color(0.2f, 0.75f, 0.3f, 1.0f));
+        auto* btnIcone = linhaBotoes->add<IconButton>("+");
+        btnIcone->setBackgroundColor(Color(0.2f, 0.75f, 0.3f, 1.0f));
 
-        auto* inputRow = panel->add<HBox>();
-        inputRow->getLayout().spacing = 8;
+        auto* linhaInput = painel->add<HBox>();
+        linhaInput->getLayout().spacing = 8;
 
-        auto* nameLabel = inputRow->add<Label>("Name:");
-        nameLabel->setFixedWidth(80);
+        auto* labelNome = linhaInput->add<Label>("Nome:");
+        labelNome->setFixedWidth(80);
 
-        auto* nameInput = inputRow->add<TextField>();
-        nameInput->setPlaceholder("Enter your name...");
-        nameInput->getLayout().grow = 1;
+        auto* inputNome = linhaInput->add<TextField>();
+        inputNome->setPlaceholder("Introduz o teu nome...");
+        inputNome->getLayout().grow = 1;
 
-        auto* passwordRow = panel->add<HBox>();
-        passwordRow->getLayout().spacing = 8;
+        auto* linhaPassword = painel->add<HBox>();
+        linhaPassword->getLayout().spacing = 8;
 
-        auto* passLabel = passwordRow->add<Label>("Password:");
-        passLabel->setFixedWidth(80);
+        auto* labelPass = linhaPassword->add<Label>("Senha:");
+        labelPass->setFixedWidth(80);
 
-        auto* passInput = passwordRow->add<TextField>();
-        passInput->setPlaceholder("Enter password...");
-        passInput->setPasswordMode(true);
-        passInput->getLayout().grow = 1;
+        auto* inputPass = linhaPassword->add<TextField>();
+        inputPass->setPlaceholder("Introduz a senha...");
+        inputPass->setPasswordMode(true);
+        inputPass->getLayout().grow = 1;
 
-        auto* checkboxRow = panel->add<HBox>();
-        checkboxRow->getLayout().spacing = 16;
+        auto* linhaCheckbox = painel->add<HBox>();
+        linhaCheckbox->getLayout().spacing = 16;
 
-        auto* cb1 = checkboxRow->add<Checkbox>("Remember me");
+        auto* cb1 = linhaCheckbox->add<Checkbox>("Lembrar-me");
         cb1->setChecked(true);
 
-        auto* cb2 = checkboxRow->add<Checkbox>("Subscribe to newsletter");
+        auto* cb2 = linhaCheckbox->add<Checkbox>("Subscrever newsletter");
         cb2->setChecked(false);
 
-        auto* radioRow = panel->add<HBox>();
-        radioRow->getLayout().spacing = 16;
+        auto* linhaRadio = painel->add<HBox>();
+        linhaRadio->getLayout().spacing = 16;
 
-        auto* rb1 = radioRow->add<RadioButton>("Light theme");
+        auto* rb1 = linhaRadio->add<RadioButton>("Tema claro");
         rb1->setSelected(true);
-        rb1->setGroup("theme");
+        rb1->setGroup("tema");
 
-        auto* rb2 = radioRow->add<RadioButton>("Dark theme");
-        rb2->setGroup("theme");
+        auto* rb2 = linhaRadio->add<RadioButton>("Tema escuro");
+        rb2->setGroup("tema");
 
-        auto* sliderRow = panel->add<HBox>();
-        sliderRow->getLayout().spacing = 8;
+        auto* linhaSlider = painel->add<HBox>();
+        linhaSlider->getLayout().spacing = 8;
 
-        auto* sliderLabel = sliderRow->add<Label>("Volume:");
-        sliderLabel->setFixedWidth(80);
+        auto* labelSlider = linhaSlider->add<Label>("Volume:");
+        labelSlider->setFixedWidth(80);
 
-        auto* slider = sliderRow->add<Slider>();
+        auto* slider = linhaSlider->add<Slider>();
         slider->setRange(0, 100);
         slider->setValue(75);
         slider->getLayout().grow = 1;
 
-        auto* sliderValueLabel = sliderRow->add<Label>("75%");
-        sliderValueLabel->setFixedWidth(50);
-        slider->setOnChangeCallback([sliderValueLabel](float value) {
+        auto* labelValorSlider = linhaSlider->add<Label>("75%");
+        labelValorSlider->setFixedWidth(50);
+        slider->setOnChangeCallback([labelValorSlider](float value) {
             int v = static_cast<int>(value);
-            sliderValueLabel->setText(std::to_string(v) + "%");
+            labelValorSlider->setText(std::to_string(v) + "%");
         });
 
-        auto* progressRow = panel->add<HBox>();
-        progressRow->getLayout().spacing = 8;
+        auto* linhaProgresso = painel->add<HBox>();
+        linhaProgresso->getLayout().spacing = 8;
 
-        auto* progressLabel = progressRow->add<Label>("Progress:");
-        progressLabel->setFixedWidth(80);
+        auto* labelProgresso = linhaProgresso->add<Label>("Progresso:");
+        labelProgresso->setFixedWidth(80);
 
-        auto* progressBar = progressRow->add<ProgressBar>();
-        progressBar->setProgress(65);
-        progressBar->getLayout().grow = 1;
+        auto* barraProgresso = linhaProgresso->add<ProgressBar>();
+        barraProgresso->setProgress(65);
+        barraProgresso->getLayout().grow = 1;
 
-        auto* dropdownRow = panel->add<HBox>();
-        dropdownRow->getLayout().spacing = 8;
+        auto* linhaDropdown = painel->add<HBox>();
+        linhaDropdown->getLayout().spacing = 8;
 
-        auto* dropdownLabel = dropdownRow->add<Label>("Language:");
-        dropdownLabel->setFixedWidth(80);
+        auto* labelDropdown = linhaDropdown->add<Label>("Idioma:");
+        labelDropdown->setFixedWidth(80);
 
-        auto* dropdown = dropdownRow->add<Dropdown>();
+        auto* dropdown = linhaDropdown->add<Dropdown>();
         dropdown->addItem("en", "English");
         dropdown->addItem("pt", "Portugues");
         dropdown->addItem("es", "Espanol");
@@ -139,18 +139,18 @@ private:
         dropdown->setSelectedIndex(0);
         dropdown->getLayout().grow = 1;
 
-        auto* windowWidget = root->add<WindowWidget>("Floating Window");
-        windowWidget->setPosition(400, 200);
-        windowWidget->setSize(350, 200);
-        windowWidget->getLayout().position = PositionType::Absolute;
+        auto* janelaFlutuante = root->add<WindowWidget>("Janela Flutuante");
+        janelaFlutuante->setPosition(400, 200);
+        janelaFlutuante->setSize(350, 200);
+        janelaFlutuante->getLayout().position = PositionType::Absolute;
 
-        auto* winContent = windowWidget->getContentPanel();
-        winContent->getLayout().spacing = 8;
-        auto* winLabel = winContent->add<Label>("This is a floating, draggable window!");
-        winLabel->setFontSize(14);
-        auto* winButton = winContent->add<Button>("Close Window");
-        winButton->setOnClick([windowWidget]() {
-            windowWidget->setVisible(false);
+        auto* conteudoJanela = janelaFlutuante->getContentPanel();
+        conteudoJanela->getLayout().spacing = 8;
+        auto* labelJanela = conteudoJanela->add<Label>("Esta e uma janela flutuante e arrastavel!");
+        labelJanela->setFontSize(14);
+        auto* btnFecharJanela = conteudoJanela->add<Button>("Fechar Janela");
+        btnFecharJanela->setOnClick([janelaFlutuante]() {
+            janelaFlutuante->setVisible(false);
         });
 
         GUI::instance().setRoot(root);

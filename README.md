@@ -1,7 +1,7 @@
 # GUIEngine
 
 <p align="center">
-  <strong>A modern, retained-mode GUI engine for C++ with SDL2 + OpenGL backend</strong>
+  <strong>Uma engine de interface grafica moderna em C++ com SDL2 + OpenGL (retained-mode)</strong>
 </p>
 
 <p align="center">
@@ -9,209 +9,209 @@
   <img src="https://img.shields.io/badge/SDL2-2.28-green.svg" alt="SDL2">
   <img src="https://img.shields.io/badge/OpenGL-3.3-red.svg" alt="OpenGL 3.3">
   <img src="https://img.shields.io/badge/CMake-3.16+-orange.svg" alt="CMake">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+  <img src="https://img.shields.io/badge/Licenca-MIT-yellow.svg" alt="Licenca">
 </p>
 
 ---
 
-## Table of Contents
+## Sumario
 
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Project Structure](#project-structure)
-- [Building](#building)
-- [Quick Start](#quick-start)
+- [Visao Geral](#visao-geral)
+- [Funcionalidades](#funcionalidades)
+- [Arquitetura](#arquitetura)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Compilacao](#compilacao)
+- [Primeiros Passos](#primeiros-passos)
 - [Widgets](#widgets)
-- [Layout System](#layout-system)
-- [Styling & Theming](#styling--theming)
-- [Event System](#event-system)
-- [Examples](#examples)
-- [Dependencies](#dependencies)
-- [License](#license)
+- [Sistema de Layout](#sistema-de-layout)
+- [Estilos e Temas](#estilos-e-temas)
+- [Sistema de Eventos](#sistema-de-eventos)
+- [Exemplos](#exemplos)
+- [Dependencias](#dependencias)
+- [Licenca](#licenca)
 
 ---
 
-## Overview
+## Visao Geral
 
-**GUIEngine** is a lightweight, modern, retained-mode GUI framework for C++17. It provides a complete widget hierarchy with a flexible layout system (inspired by CSS Flexbox), a powerful event system, and customizable themes — all rendered with OpenGL 3.3 via SDL2.
+**GUIEngine** e uma framework de interface grafica leve e moderna para C++17. Ela oferece uma hierarquia completa de widgets com um sistema de layout flexivel (inspirado no CSS Flexbox), um sistema de eventos poderoso e temas customizaveis — tudo renderizado com OpenGL 3.3 via SDL2.
 
-Unlike immediate-mode GUI libraries (like Dear ImGui), GUIEngine retains a widget tree, making it ideal for building full applications with complex, stateful interfaces such as editors, tools, dashboards, and games.
+Diferente de bibliotecas de GUI em modo imediato (como Dear ImGui), a GUIEngine mantem uma arvore de widgets (retained-mode), o que a torna ideal para construir aplicacoes completas com interfaces complexas e com estado, como editores, ferramentas, dashboards e jogos.
 
-### Why GUIEngine?
+### Por que usar a GUIEngine?
 
-- **Retained widget tree** — Widgets persist across frames, each with their own state
-- **Flexbox-style layout** — Familiar layout model with `Row`, `Column`, `grow`, `shrink`, alignment and justification
-- **Rich widget set** — Buttons, text fields, sliders, checkboxes, dropdowns, tabs, split views, scrollable areas, windows, and more
-- **Theming** — Centralized `Theme` system with per-widget style overrides and state-based styling (hover, pressed, focused, disabled)
-- **Event system** — Event dispatch with callbacks (click, hover, focus, key, resize, scroll)
-- **OpenGL rendering** — Custom batched renderer with rounded rectangles, shadows, text rendering via stb_truetype, and texture support
-- **Header-friendly API** — Clean, intuitive C++ interface with smart pointers and modern C++ features
+- **Arvore de widgets retida** — Os widgets persistem entre frames, cada um com seu proprio estado
+- **Layout estilo Flexbox** — Modelo de layout familiar com `Row`, `Column`, `grow`, `shrink`, alinhamento e justificacao
+- **Conjunto rico de widgets** — Botoes, campos de texto, sliders, checkboxes, dropdowns, abas, split views, areas rolaveis, janelas e muito mais
+- **Temas** — Sistema centralizado de `Theme` com sobrescrita de estilo por widget e estilos baseados em estado (hover, pressionado, focado, desabilitado)
+- **Sistema de eventos** — Disparo de eventos com callbacks (clique, hover, foco, tecla, redimensionamento, scroll)
+- **Renderizacao OpenGL** — Renderer em lote customizado com retangulos arredondados, sombras, renderizacao de texto via stb_truetype e suporte a texturas
+- **API limpa** — Interface C++ intuitiva com smart pointers e recursos modernos do C++
 
 ---
 
-## Features
+## Funcionalidades
 
-| Category | Features |
-|----------|----------|
+| Categoria | Funcionalidades |
+|-----------|----------------|
 | **Widgets** | Button, IconButton, Label, TextField, Checkbox, Slider, ProgressBar, Dropdown, RadioButton, Panel, ScrollView, WindowWidget, TabView, SplitView, Separator, Spacer, Image |
-| **Layout** | Flexbox-style (Row/Column), grow/shrink factors, margin/padding, alignment (Start/Center/End/Stretch), justification (Start/Center/End/SpaceBetween/SpaceEvenly/SpaceAround), min/max dimensions |
-| **Events** | Mouse press/release/move/enter/leave/scroll, Key press/release, Text input, Focus in/out, Resize, Close |
-| **Styling** | Style objects with typed values (Color, float, int, string, bool), state-based styles (Normal/Hovered/Pressed/Focused/Disabled), global Theme singleton |
-| **Rendering** | Batched OpenGL 3.3 renderer, rounded rectangles, shadows, outline rendering, line drawing, TTF font rendering via stb_truetype, texture loading via stb_image, scissor clipping |
-| **Window** | SDL2 window with OpenGL context, VSync, fullscreen, resizable, cursor management |
+| **Layout** | Estilo Flexbox (Row/Column), fatores grow/shrink, margin/padding, alinhamento (Start/Center/End/Stretch), justificacao (Start/Center/End/SpaceBetween/SpaceEvenly/SpaceAround), dimensoes min/max |
+| **Eventos** | Mouse press/release/move/enter/leave/scroll, teclado press/release, entrada de texto, Focus in/out, Resize, Close |
+| **Estilos** | Objetos Style com valores tipados (Color, float, int, string, bool), estilos por estado (Normal/Hovered/Pressed/Focused/Disabled), Theme global singleton |
+| **Renderizacao** | Renderer OpenGL 3.3 em lote, retangulos arredondados, sombras, contornos, desenho de linhas, renderizacao de fontes TTF via stb_truetype, carregamento de texturas via stb_image, recorte com scissor |
+| **Janela** | Janela SDL2 com contexto OpenGL, VSync, fullscreen, redimensionavel, gerenciamento de cursor |
 
 ---
 
-## Architecture
+## Arquitetura
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                     Application                      │
-│  ┌───────────┐  ┌──────────┐  ┌──────────────────┐ │
-│  │  Window   │  │ Renderer │  │   Widget Tree    │ │
-│  │  (SDL2)   │  │ (OpenGL) │  │  (Retained Mode) │ │
-│  └─────┬─────┘  └────┬─────┘  └────────┬─────────┘ │
-│        │              │                  │           │
-│        │   Events     │   Draw Calls    │ Layout    │
-│        └──────────────┴──────────────────┘           │
-│                         │                            │
-│                   ┌─────┴─────┐                      │
-│                   │   Theme   │                      │
-│                   │  Style    │                      │
-│                   └───────────┘                      │
-└─────────────────────────────────────────────────────┘
++-----------------------------------------------------+
+|                     Application                      |
+|  +-----------+  +----------+  +------------------+  |
+|  |  Window   |  | Renderer |  |   Widget Tree    |  |
+|  |  (SDL2)   |  | (OpenGL) |  |  (Retained Mode) |  |
+|  +-----+-----+  +----+-----+  +--------+---------+  |
+|        |              |                  |           |
+|        |   Eventos    |   Draw Calls     | Layout    |
+|        +--------------+------------------+           |
+|                         |                            |
+|                   +-----+-----+                      |
+|                   |   Theme  |                      |
+|                   |  Style   |                      |
+|                   +-----------+                      |
++-----------------------------------------------------+
 ```
 
-### Core Components
+### Componentes Principais
 
-| Component | Description |
-|-----------|-------------|
-| `Application` | The main loop controller. Manages event dispatch, widget tree, focus, layout invalidation, rendering, and the update cycle. |
-| `Window` | Wraps SDL2 window creation, OpenGL context, cursor management, and event polling (translates SDL events to GUIEngine events). |
-| `Renderer` | A batched OpenGL 3.3 renderer. Handles all drawing: rectangles, rounded rects, outlines, shadows, triangles, text (via stb_truetype), and textures. |
-| `Widget` | The base class for all UI elements. Provides geometry, layout parameters, style, event handling, child management, and the measure/layout/render lifecycle. |
-| `Style` & `Theme` | Typed property system for colors, sizes, fonts. Theme provides a global default style. Widgets can override any style property. |
-| `Event` & `EventDispatcher` | A flexible event system with typed events and callback-based handlers. |
+| Componente | Descricao |
+|------------|-----------|
+| `Application` | O controlador do loop principal. Gerencia o disparo de eventos, a arvore de widgets, foco, invalidacao de layout, renderizacao e o ciclo de update. |
+| `Window` | Encapsula a criacao de janela SDL2, contexto OpenGL, gerenciamento de cursor e.polling de eventos (traduz eventos SDL para eventos da GUIEngine). |
+| `Renderer` | Um renderer OpenGL 3.3 em lote. Trata todo o desenho: retangulos, retangulos arredondados, contornos, sombras, triangulos, texto (via stb_truetype) e texturas. |
+| `Widget` | A classe base de todos os elementos da UI. Fornece geometria, parametros de layout, estilo, tratamento de eventos, gerenciamento de filhos e o ciclo de vida measure/layout/render. |
+| `Style` & `Theme` | Sistema de propriedades tipadas para cores, tamanhos, fontes. O Theme fornece um estilo padrao global. Os widgets podem sobrescrever qualquer propriedade de estilo. |
+| `Event` & `EventDispatcher` | Um sistema de eventos flexivel com eventos tipados e manipuladores baseados em callback. |
 
 ---
 
-## Project Structure
+## Estrutura do Projeto
 
 ```
 GUIEngine/
-├── CMakeLists.txt           # Main build file
-├── cmake/
-│   └── Dependencies.cmake   # Third-party dependency fetching
-├── include/
-│   └── GUIEngine/           # Public headers
-│       ├── GUIEngine.hpp    # Umbrella header (include everything)
-│       ├── Types.hpp         # Color, Vec2, Rect
-│       ├── Event.hpp         # Event types and dispatcher
-│       ├── Layout.hpp        # Layout params (flexbox-style)
-│       ├── Style.hpp         # Style and Theme system
-│       ├── Widget.hpp        # Base widget class
-│       ├── Window.hpp        # SDL2 window wrapper
-│       ├── Renderer.hpp      # OpenGL batched renderer
-│       ├── Application.hpp   # Main application loop
-│       ├── GUI.hpp           # High-level GUI facade
-│       ├── Containers.hpp    # HBox, VBox, StackPanel, Container
-│       ├── Label.hpp         # Text label widget
-│       ├── Button.hpp        # Button widget
-│       ├── IconButton.hpp    # Icon-only button
-│       ├── TextField.hpp     # Single-line text input
-│       ├── Checkbox.hpp      # Checkbox widget
-│       ├── Slider.hpp        # Slider widget
-│       ├── ProgressBar.hpp   # Progress bar widget
-│       ├── Panel.hpp         # Container panel with background
-│       ├── ScrollView.hpp    # Scrollable container
-│       ├── Decorations.hpp   # Separator, Spacer, Image
-│       ├── WindowWidget.hpp  # Draggable floating window
-│       ├── Dropdown.hpp      # Dropdown select + RadioButton
-│       ├── TabView.hpp       # Tabbed container
-│       └── SplitView.hpp     # Resizable split panel
-├── src/                     # Implementation files
-│   └── *.cpp
-├── examples/
-│   ├── CMakeLists.txt
-│   └── demo.cpp              # Full demo application
-└── assets/
-    └── fonts/
++-- CMakeLists.txt           # Arquivo principal de build
++-- cmake/
+|   +-- Dependencies.cmake   # Busca de dependencias de terceiros
++-- include/
+|   +-- GUIEngine/           # Headers publicos
+|       +-- GUIEngine.hpp    # Header guarda-chuva (inclui tudo)
+|       +-- Types.hpp        # Color, Vec2, Rect
+|       +-- Event.hpp        # Tipos de evento e dispatcher
+|       +-- Layout.hpp       # Parametros de layout (estilo flexbox)
+|       +-- Style.hpp        # Sistema de Style e Theme
+|       +-- Widget.hpp       # Classe base de widgets
+|       +-- Window.hpp       # Wrapper de janela SDL2
+|       +-- Renderer.hpp     # Renderer OpenGL em lote
+|       +-- Application.hpp  # Loop principal da aplicacao
+|       +-- GUI.hpp          # Facade de alto nivel para a GUI
+|       +-- Containers.hpp   # HBox, VBox, StackPanel, Container
+|       +-- Label.hpp        # Widget de texto
+|       +-- Button.hpp       # Widget de botao
+|       +-- IconButton.hpp   # Botao apenas com icone
+|       +-- TextField.hpp    # Entrada de texto de uma linha
+|       +-- Checkbox.hpp     # Widget de checkbox
+|       +-- Slider.hpp       # Widget de slider
+|       +-- ProgressBar.hpp  # Barra de progresso
+|       +-- Panel.hpp        # Painel conteiner com fundo
+|       +-- ScrollView.hpp   # Conteiner rolavel
+|       +-- Decorations.hpp  # Separator, Spacer, Image
+|       +-- WindowWidget.hpp # Janela flutuante arrastavel
+|       +-- Dropdown.hpp     # Select dropdown + RadioButton
+|       +-- TabView.hpp      # Conteiner com abas
+|       +-- SplitView.hpp    # Painel divisivel redimensionavel
++-- src/                     # Arquivos de implementacao
+|   +-- *.cpp
++-- examples/
+|   +-- CMakeLists.txt
+|   +-- demo.cpp             # Aplicacao demo completa
++-- assets/
+    +-- fonts/
 ```
 
 ---
 
-## Building
+## Compilacao
 
-### Prerequisites
+### Pre-requisitos
 
-- **C++17 compatible compiler** (GCC 9+, Clang 10+, MSVC 2019+)
+- **Compilador compativel com C++17** (GCC 9+, Clang 10+, MSVC 2019+)
 - **CMake 3.16+**
-- **Git** (for FetchContent dependencies)
+- **Git** (para buscar as dependencias via FetchContent)
 
-### Build Instructions
+### Instrucoes de Build
 
 ```bash
-# Clone the repository
+# Clonar o repositorio
 git clone https://github.com/devkroz/GUIEngine.git
 cd GUIEngine
 
-# Create build directory
+# Criar diretorio de build
 mkdir build && cd build
 
-# Configure (dependencies are fetched automatically)
+# Configurar (as dependencias sao baixadas automaticamente)
 cmake .. -DCMAKE_BUILD_TYPE=Release
 
-# Build
+# Compilar
 cmake --build . -j$(nproc)
 
-# Run the demo
+# Rodar o demo
 ./examples/guiengine_demo
 ```
 
-### Build Options
+### Opcoes de Build
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `GUIENGINE_BUILD_EXAMPLES` | `ON` | Build the demo application |
-| `GUIENGINE_BUILD_SHARED` | `OFF` | Build GUIEngine as a shared library |
+| Opcao | Padrao | Descricao |
+|-------|--------|-----------|
+| `GUIENGINE_BUILD_EXAMPLES` | `ON` | Compilar a aplicacao demo |
+| `GUIENGINE_BUILD_SHARED` | `OFF` | Compilar a GUIEngine como biblioteca compartilhada |
 
-### Platform Notes
+### Notas por Plataforma
 
-- **Linux**: Install SDL2 development packages (`sudo apt install libsdl2-dev`)
+- **Linux**: Instale os pacotes de desenvolvimento do SDL2 (`sudo apt install libsdl2-dev`)
 - **macOS**: Use Homebrew (`brew install sdl2`)
-- **Windows**: Dependencies are fetched automatically via CMake FetchContent
+- **Windows**: As dependencias sao baixadas automaticamente via CMake FetchContent
 
 ---
 
-## Quick Start
+## Primeiros Passos
 
 ```cpp
 #include "GUIEngine/GUIEngine.hpp"
 using namespace GUIEngine;
 
 int main() {
-    // Initialize the engine
-    GUI::instance().init(800, 600, "My App");
+    // Inicializar a engine
+    GUI::instance().init(800, 600, "Minha App");
 
-    // Build your UI
+    // Construir a sua UI
     auto* root = new VBox();
     root->setPadding(Padding(20));
     root->getLayout().spacing = 12;
 
-    auto* title = root->add<Label>("Hello, GUIEngine!");
+    auto* title = root->add<Label>("Ola, GUIEngine!");
     title->setFontSize(24);
 
-    auto* button = root->add<Button>("Click Me");
+    auto* button = root->add<Button>("Clica em Mim");
     button->setPrimary(true);
     button->setOnClickListener([]() {
-        printf("Button clicked!\n");
+        printf("Botao clicado!\n");
     });
 
     auto* input = root->add<TextField>();
-    input->setPlaceholder("Type something...");
+    input->setPlaceholder("Escreve algo...");
 
-    // Set root and run
+    // Definir a raiz e executar
     GUI::instance().setRoot(root);
     GUI::instance().run();
 
@@ -226,16 +226,16 @@ int main() {
 ### Button
 
 ```cpp
-auto* button = panel->add<Button>("Save");
+auto* button = panel->add<Button>("Guardar");
 button->setPrimary(true);
 button->setBorderRadius(8);
-button->setOnClickListener([]() { saveFile(); });
+button->setOnClickListener([]() { guardarFicheiro(); });
 ```
 
 ### Label
 
 ```cpp
-auto* label = panel->add<Label>("Hello, World!");
+auto* label = panel->add<Label>("Ola, Mundo!");
 label->setFontSize(18);
 label->setTextColor(Color(0.2f, 0.5f, 0.95f));
 label->setAlign(Label::Alignment::Center);
@@ -245,20 +245,20 @@ label->setAlign(Label::Alignment::Center);
 
 ```cpp
 auto* input = panel->add<TextField>();
-input->setPlaceholder("Enter your name...");
+input->setPlaceholder("Introduz o teu nome...");
 input->setPasswordMode(true);
 input->setOnChange([](const std::string& text) {
-    printf("Input changed: %s\n", text.c_str());
+    printf("Input alterado: %s\n", text.c_str());
 });
 input->setOnSubmit([](const std::string& text) {
-    printf("Submitted: %s\n", text.c_str());
+    printf("Submetido: %s\n", text.c_str());
 });
 ```
 
 ### Checkbox
 
 ```cpp
-auto* checkbox = panel->add<Checkbox>("Enable notifications");
+auto* checkbox = panel->add<Checkbox>("Ativar notificacoes");
 checkbox->setChecked(true);
 checkbox->setOnChange([](bool checked) {
     printf("Checkbox: %s\n", checked ? "ON" : "OFF");
@@ -284,7 +284,7 @@ dropdown->addItem("en", "English");
 dropdown->addItem("pt", "Portugues");
 dropdown->setSelectedIndex(0);
 dropdown->setOnChange([](const std::string& value) {
-    printf("Selected: %s\n", value.c_str());
+    printf("Selecionado: %s\n", value.c_str());
 });
 ```
 
@@ -319,25 +319,25 @@ scroll->setContentSize(0, 2000);
 scroll->setStickToBottom(true);
 ```
 
-### WindowWidget (Floating Window)
+### WindowWidget (Janela Flutuante)
 
 ```cpp
-auto* window = root->add<WindowWidget>("Settings");
+auto* window = root->add<WindowWidget>("Definicoes");
 window->setSize(400, 300);
 window->setMovable(true);
 window->setClosable(true);
 
 auto* content = window->getContentPanel();
-content->add<Label>("Window content goes here");
+content->add<Label>("O conteudo da janela fica aqui");
 ```
 
 ### TabView
 
 ```cpp
 auto* tabs = root->add<TabView>();
-Tab* tab1 = tabs->addTab("home", "Home", false);
+Tab* tab1 = tabs->addTab("home", "Inicio", false);
 tab1->content = std::make_unique<Panel>();
-Tab* tab2 = tabs->addTab("settings", "Settings", true);
+Tab* tab2 = tabs->addTab("settings", "Definicoes", true);
 tab2->content = std::make_unique<Panel>();
 ```
 
@@ -349,58 +349,58 @@ split->setOrientation(LayoutDirection::Row);
 split->setSplit(0.3f);
 split->setResizable(true);
 
-split->add<Panel>();  // Left pane
-split->add<Panel>();  // Right pane
+split->add<Panel>();  // Painel esquerdo
+split->add<Panel>();  // Painel direito
 ```
 
 ---
 
-## Layout System
+## Sistema de Layout
 
-GUIEngine uses a **Flexbox-inspired layout system**. Each widget has `LayoutParams` that control how it participates in its parent's layout.
+A GUIEngine usa um **sistema de layout inspirado no Flexbox**. Cada widget tem `LayoutParams` que controlam como ele participa no layout do seu parent.
 
-### Layout Direction
+### Direcao do Layout
 
 ```cpp
-// Horizontal layout (children side by side)
+// Layout horizontal (filhos lado a lado)
 container->getLayout().direction = LayoutDirection::Row;
 
-// Vertical layout (children stacked)
+// Layout vertical (filhos empilhados)
 container->getLayout().direction = LayoutDirection::Column;
 ```
 
 ### Grow & Shrink
 
 ```cpp
-widget->getLayout().grow = 1;    // Fill available space
-widget->getLayout().shrink = 1;  // Shrink when space is limited
-widget->setFixedWidth(200);       // Don't grow or shrink
+widget->getLayout().grow = 1;    // Preencher o espaco disponivel
+widget->getLayout().shrink = 1;  // Encolher quando o espaco e limitado
+widget->setFixedWidth(200);       // Nao crescer nem encolher
 ```
 
-### Alignment
+### Alinhamento
 
 ```cpp
-// Cross-axis alignment (perpendicular to direction)
+// Alinhamento no eixo cruzado (perpendicular a direcao)
 container->getLayout().itemAlignment = Alignment::Center;  // | Start | End | Stretch
 ```
 
-### Justify Content (Main-axis distribution)
+### Justify Content (Distribuicao no eixo principal)
 
 ```cpp
 container->getLayout().justifyContent = Justify::SpaceBetween;
-// Options: Start | Center | End | SpaceBetween | SpaceEvenly | SpaceAround
+// Opcoes: Start | Center | End | SpaceBetween | SpaceEvenly | SpaceAround
 ```
 
 ### Margin & Padding
 
 ```cpp
-widget->setMargin(Margin(10));          // All sides
+widget->setMargin(Margin(10));          // Todos os lados
 widget->setMargin(Margin(10, 20));      // Vertical, Horizontal
-widget->setMargin(Margin(10, 20, 5, 15)); // Top, Right, Bottom, Left
+widget->setMargin(Margin(10, 20, 5, 15)); // Topo, Direita, Baixo, Esquerda
 widget->setPadding(Padding(12));
 ```
 
-### Min/Max Dimensions
+### Dimensoes Min/Max
 
 ```cpp
 widget->setMinWidth(100);
@@ -411,11 +411,11 @@ widget->getLayout().maxHeight = 300;
 
 ---
 
-## Styling & Theming
+## Estilos e Temas
 
-### Style Properties
+### Propriedades de Estilo
 
-Each widget has a `Style` object that holds typed properties:
+Cada widget tem um objeto `Style` que guarda propriedades tipadas:
 
 ```cpp
 widget->getStyle().set("backgroundColor", Color(0.1f, 0.1f, 0.15f));
@@ -425,9 +425,9 @@ widget->getStyle().set("fontSize", 14);
 widget->getStyle().set("textColor", Color::White());
 ```
 
-### Themes
+### Temas
 
-The global `Theme` provides default values for all style properties:
+O `Theme` global fornece valores padrao para todas as propriedades de estilo:
 
 ```cpp
 auto& theme = Theme::defaultTheme();
@@ -439,7 +439,7 @@ theme.set("borderRadius", 6.0f);
 theme.set("fontSize", 14);
 ```
 
-### Built-in Colors
+### Cores Pre-definidas
 
 ```cpp
 Color::Red()        // (1, 0, 0)
@@ -455,100 +455,100 @@ Color::Transparent()// (0, 0, 0, 0)
 
 ---
 
-## Event System
+## Sistema de Eventos
 
-GUIEngine dispatches typed events through the widget tree. Widgets handle events via callbacks:
+A GUIEngine dispara eventos tipados atraves da arvore de widgets. Os widgets tratam os eventos via callbacks:
 
 ```cpp
-// Mouse events
-widget->setOnClickListener([]() { /* click */ });
-widget->setOnHoverEnterListener([]() { /* mouse enter */ });
-widget->setOnHoverLeaveListener([]() { /* mouse leave */ });
-widget->setOnPressedListener([]() { /* mouse down */ });
-widget->setOnReleasedListener([]() { /* mouse up */ });
+// Eventos de rato (mouse)
+widget->setOnClickListener([]() { /* clique */ });
+widget->setOnHoverEnterListener([]() { /* rato entrou */ });
+widget->setOnHoverLeaveListener([]() { /* rato saiu */ });
+widget->setOnPressedListener([]() { /* rato pressionado */ });
+widget->setOnReleasedListener([]() { /* rato largado */ });
 
-// Keyboard events
+// Eventos de teclado
 widget->setOnKeyListener([](const Event& e) -> bool {
-    if (e.key == 13) { /* Enter pressed */ }
+    if (e.key == 13) { /* Enter pressionado */ }
     return false;
 });
 
-// Focus events
+// Eventos de foco
 widget->setOnFocusChangeListener([](bool focused) {
-    printf(focused ? "Focused\n" : "Unfocused\n");
+    printf(focused ? "Focado\n" : "Sem foco\n");
 });
 
-// Resize events
+// Eventos de redimensionamento
 widget->setOnResizeListener([](float w, float h) {
-    printf("Resized to %.0f x %.0f\n", w, h);
+    printf("Redimensionado para %.0f x %.0f\n", w, h);
 });
 ```
 
-### Event Types
+### Tipos de Evento
 
-| Event Type | Description |
-|------------|-------------|
-| `MouseButtonPress` | Mouse button pressed (left/right) |
-| `MouseButtonRelease` | Mouse button released |
-| `MouseMove` | Mouse moved over the widget |
-| `MouseEnter` | Mouse entered the widget bounds |
-| `MouseLeave` | Mouse left the widget bounds |
-| `MouseScroll` | Mouse wheel scrolled |
-| `KeyPress` | Keyboard key pressed |
-| `KeyRelease` | Keyboard key released |
-| `TextInput` | Text input (for TextField) |
-| `FocusIn` | Widget gained focus |
-| `FocusOut` | Widget lost focus |
-| `Resize` | Window resized |
-| `Close` | Window close requested |
+| Tipo de Evento | Descricao |
+|----------------|-----------|
+| `MouseButtonPress` | Botao do rato pressionado (esquerdo/direito) |
+| `MouseButtonRelease` | Botao do rato largado |
+| `MouseMove` | Rato movido sobre o widget |
+| `MouseEnter` | Rato entrou nos limites do widget |
+| `MouseLeave` | Rato saiu dos limites do widget |
+| `MouseScroll` | Roda do rato rodada |
+| `KeyPress` | Tecla do teclado pressionada |
+| `KeyRelease` | Tecla do teclado largada |
+| `TextInput` | Entrada de texto (para TextField) |
+| `FocusIn` | Widget ganhou foco |
+| `FocusOut` | Widget perdeu foco |
+| `Resize` | Janela redimensionada |
+| `Close` | Fecho da janela solicitado |
 
 ---
 
-## Examples
+## Exemplos
 
-### Demo Application
+### Aplicacao Demo
 
-The `examples/demo.cpp` file contains a comprehensive demo showcasing all widgets:
+O ficheiro `examples/demo.cpp` contem um demo abrangente que mostra todos os widgets:
 
 ```bash
-# Build and run
+# Compilar e executar
 cd build
 cmake --build . --target guiengine_demo
 ./examples/guiengine_demo
 ```
 
-The demo includes:
-- Buttons (primary, secondary, disabled, icon)
-- Text fields (normal and password)
-- Checkboxes and radio buttons
-- Slider with live value display
-- Progress bar
-- Dropdown selector
-- Floating draggable window
-- And more!
+O demo inclui:
+- Botoes (primario, secundario, desabilitado, icone)
+- Campos de texto (normal e password)
+- Checkboxes e radio buttons
+- Slider com exibicao de valor em tempo real
+- Barra de progresso
+- Seletor dropdown
+- Janela flutuante arrastavel
+- E muito mais!
 
 ---
 
-## Dependencies
+## Dependencias
 
-All dependencies are fetched automatically via CMake's `FetchContent`:
+Todas as dependencias sao baixadas automaticamente via `FetchContent` do CMake:
 
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| [SDL2](https://github.com/libsdl-org/SDL) | 2.28.0 | Windowing, input, OpenGL context |
-| [glad](https://github.com/Dav1dde/glad) | 2.0.6 | OpenGL function loader |
-| [stb](https://github.com/nothings/stb) | latest | Image loading (stb_image) and TTF font rendering (stb_truetype) |
+| Dependencia | Versao | Proposito |
+|-------------|--------|-----------|
+| [SDL2](https://github.com/libsdl-org/SDL) | 2.28.0 | Janela, input, contexto OpenGL |
+| [glad](https://github.com/Dav1dde/glad) | 0.1.36 | Carregador de funcoes OpenGL |
+| [stb](https://github.com/nothings/stb) | latest | Carregamento de imagens (stb_image) e renderizacao de fontes TTF (stb_truetype) |
 
-> **Note**: If SDL2 is already installed on your system, it will be used instead of being fetched.
+> **Nota**: Se o SDL2 ja estiver instalado no seu sistema, sera usado em vez de ser baixado.
 
 ---
 
-## License
+## Licenca
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Este projeto esta licenciado sob a Licenca MIT. Veja o ficheiro [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
 <p align="center">
-  Made with care by <a href="https://github.com/devkroz">devkroz</a>
+  Feito com cuidado por <a href="https://github.com/devkroz">devkroz</a>
 </p>

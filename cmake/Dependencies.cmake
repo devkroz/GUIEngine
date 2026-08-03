@@ -1,4 +1,4 @@
-# Dependencies.cmake - Fetch and configure third-party dependencies for GUIEngine
+# Dependencies.cmake - Buscar e configurar dependencias de terceiros para a GUIEngine
 
 include(FetchContent)
 
@@ -24,7 +24,7 @@ if(NOT SDL2_FOUND)
     endif()
 endif()
 
-# GLAD - OpenGL loader
+# GLAD - Carregador de funcoes OpenGL
 FetchContent_Declare(
     glad
     GIT_REPOSITORY https://github.com/Dav1dde/glad.git
@@ -41,7 +41,7 @@ if(NOT TARGET glad)
     target_include_directories(glad PUBLIC ${glad_SOURCE_DIR}/include)
 endif()
 
-# STB - Image loading and TrueType font rendering
+# STB - Carregamento de imagens e renderizacao de fontes TrueType
 FetchContent_Declare(
     stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
@@ -52,7 +52,7 @@ if(NOT stb_POPULATED)
     FetchContent_Populate(stb)
 endif()
 
-# stb_image needs a compilation unit with STB_IMAGE_IMPLEMENTATION
+# stb_image precisa de uma unidade de compilacao com STB_IMAGE_IMPLEMENTATION
 if(NOT TARGET stb_image)
     file(WRITE ${CMAKE_BINARY_DIR}/stb_image_impl.c
         "#define STB_IMAGE_IMPLEMENTATION\n"

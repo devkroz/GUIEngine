@@ -1,9 +1,9 @@
-# Build directories
+# Diretorios de build
 build/
 cmake-build-*/
 out/
 
-# IDE files
+# Ficheiros de IDE
 .vscode/
 .idea/
 *.swp
@@ -12,7 +12,7 @@ out/
 Thumbs.db
 *.user
 
-# Compiled objects
+# Objetos compilados
 *.o
 *.obj
 *.so
@@ -29,9 +29,9 @@ Makefile
 install_manifest.txt
 compile_commands.json
 
-# Third-party fetch content
+# FetchContent de terceiros
 _deps/
 third_party/
 
-# Log files
+# Ficheiros de log
 *.log

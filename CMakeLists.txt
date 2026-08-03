@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(GUIEngine
     VERSION 1.0.0
-    DESCRIPTION "A modern C++ GUI engine with SDL2 + OpenGL backend"
+    DESCRIPTION "Uma engine de interface grafica moderna em C++ com SDL2 + OpenGL"
     LANGUAGES C CXX
 )
 
@@ -14,8 +14,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
-option(GUIENGINE_BUILD_EXAMPLES "Build example applications" ON)
-option(GUIENGINE_BUILD_SHARED "Build as shared library" OFF)
+option(GUIENGINE_BUILD_EXAMPLES "Compilar aplicacoes de exemplo" ON)
+option(GUIENGINE_BUILD_SHARED "Compilar como biblioteca compartilhada" OFF)
 
 set(GUIENGINE_SOURCES
     src/Widget.cpp
@@ -67,10 +67,10 @@ set(GUIENGINE_PUBLIC_HEADERS
     include/GUIEngine/GUIEngine.hpp
 )
 
-# Third-party dependencies
+# Dependencias de terceiros
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Dependencies.cmake)
 
-# Library target
+# Alvo da biblioteca
 if(GUIENGINE_BUILD_SHARED)
     add_library(GUIEngine SHARED ${GUIENGINE_SOURCES} ${GUIENGINE_PUBLIC_HEADERS})
 else()
@@ -107,7 +107,7 @@ else()
     target_compile_options(GUIEngine PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-# Install
+# Instalacao
 include(GNUInstallDirs)
 
 install(TARGETS GUIEngine
@@ -121,7 +121,7 @@ install(DIRECTORY include/GUIEngine
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-# Examples
+# Exemplos
 if(GUIENGINE_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
